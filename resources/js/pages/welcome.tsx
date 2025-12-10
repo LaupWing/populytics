@@ -3,17 +3,10 @@ import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Plus, Minus } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { useCartStore } from '@/stores/cart-store';
-import { Toaster, toast } from 'sonner';
-
-interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    image_url: string;
-}
+import { Toaster } from 'sonner';
+import { ProductCard, type Product } from '@/components/product-card';
 
 export default function Welcome({
     canRegister = true,
@@ -23,30 +16,7 @@ export default function Welcome({
     products?: Product[];
 }) {
     const { auth } = usePage<SharedData>().props;
-    const { items, addItem, updateQuantity, getTotalItems } = useCartStore();
-
-    const getProductQuantity = (productId: number) => {
-        const item = items.find((i) => i.id === productId);
-        return item?.quantity || 0;
-    };
-
-    const handleAddToCart = (product: Product) => {
-        addItem({
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            image_url: product.image_url,
-        });
-
-        toast.success(`${product.title} toegevoegd aan winkelwagen`, {
-            description: `€${product.price.toFixed(2)}`,
-            style: {
-                background: '#004876',
-                color: 'white',
-                border: 'none',
-            },
-        });
-    };
+    const { getTotalItems } = useCartStore();
 
     return (
         <>
@@ -244,107 +214,7 @@ export default function Welcome({
 
                         <div className="grid md:grid-cols-2 gap-8">
                             {products.map((product) => (
-                                <div
-                                    key={product.id}
-                                    className="rounded-lg overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-xl cursor-pointer"
-                                    style={{
-                                        background: 'white',
-                                        boxShadow: '3px 3px 13px 2px rgba(0, 0, 0, 0.1)',
-                                    }}
-                                >
-                                    {/* Product Image */}
-                                    <div className="relative h-56 overflow-hidden">
-                                        <img
-                                            src={product.image_url}
-                                            alt={product.title}
-                                            className="w-full h-full object-cover transition-transform hover:scale-105"
-                                        />
-                                    </div>
-
-                                    {/* Product Info */}
-                                    <div className="p-6">
-                                        <h3
-                                            className="text-xl mb-2"
-                                            style={{
-                                                fontFamily: '"NexaText-Bold", sans-serif',
-                                                color: '#004876',
-                                            }}
-                                        >
-                                            {product.title}
-                                        </h3>
-                                        <p
-                                            className="mb-4 text-sm"
-                                            style={{
-                                                color: '#004876',
-                                                opacity: 0.8,
-                                                lineHeight: 1.6,
-                                            }}
-                                        >
-                                            {product.description}
-                                        </p>
-
-                                        <div className="flex items-center justify-between">
-                                            <span
-                                                className="text-2xl"
-                                                style={{
-                                                    fontFamily: '"NexaText-Heavy", sans-serif',
-                                                    color: '#00A6D6',
-                                                }}
-                                            >
-                                                €{product.price.toFixed(2)}
-                                            </span>
-
-                                            {getProductQuantity(product.id) > 0 ? (
-                                                <div className="flex items-center gap-3">
-                                                    <button
-                                                        onClick={() => updateQuantity(product.id, getProductQuantity(product.id) - 1)}
-                                                        className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:opacity-80"
-                                                        style={{
-                                                            background: '#e9f3f8',
-                                                            color: '#004876',
-                                                            border: '2px solid #004876',
-                                                        }}
-                                                    >
-                                                        <Minus className="w-4 h-4" />
-                                                    </button>
-                                                    <span
-                                                        className="text-lg min-w-[2rem] text-center"
-                                                        style={{
-                                                            fontFamily: '"NexaText-Bold", sans-serif',
-                                                            color: '#004876',
-                                                        }}
-                                                    >
-                                                        {getProductQuantity(product.id)}
-                                                    </span>
-                                                    <button
-                                                        onClick={() => handleAddToCart(product)}
-                                                        className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:opacity-80"
-                                                        style={{
-                                                            background: '#004876',
-                                                            color: 'white',
-                                                            border: '2px solid #004876',
-                                                        }}
-                                                    >
-                                                        <Plus className="w-4 h-4" />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handleAddToCart(product)}
-                                                    className="px-6 py-2 rounded transition-all hover:opacity-90"
-                                                    style={{
-                                                        fontFamily: '"NexaText-Bold", sans-serif',
-                                                        background: '#004876',
-                                                        color: 'white',
-                                                        border: '2px solid #004876',
-                                                    }}
-                                                >
-                                                    In winkelwagen
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                                <ProductCard key={product.id} product={product} />
                             ))}
                         </div>
                     </div>
