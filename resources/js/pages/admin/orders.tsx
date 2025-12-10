@@ -1,6 +1,13 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Package, ArrowLeft, Clock, User, Mail, ChevronRight, Check } from 'lucide-react';
+import { Package, ArrowLeft, Clock, User, Mail, ChevronRight } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 interface OrderProduct {
     id: number;
@@ -65,14 +72,6 @@ export default function AdminOrders({ orders = [] }: AdminOrdersProps) {
         <>
             <Head title="Bestellingen Beheer - Populytics">
                 <style>{`
-                    .status-select {
-                        appearance: none;
-                        cursor: pointer;
-                        padding-right: 2rem;
-                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-                        background-repeat: no-repeat;
-                        background-position: right 0.5rem center;
-                    }
                     @font-face {
                         font-family: "NexaText-Bold";
                         src: url("https://populytics.nl/wp-content/themes/populytics/assets/fonts/NexaText/NexaText-Bold.woff2") format("woff2");
@@ -374,18 +373,25 @@ export default function AdminOrders({ orders = [] }: AdminOrdersProps) {
                                             </div>
 
                                             <div className="col-span-2">
-                                                <select
+                                                <Select
                                                     value={order.status}
-                                                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                                    className="status-select px-3 py-1.5 rounded-full text-sm font-medium border-0 outline-none"
-                                                    style={{
-                                                        background: order.status === 'accepted' ? '#d4edda' : '#fff3cd',
-                                                        color: order.status === 'accepted' ? '#155724' : '#856404',
-                                                    }}
+                                                    onValueChange={(value) => handleStatusChange(order.id, value)}
                                                 >
-                                                    <option value="processing">In behandeling</option>
-                                                    <option value="accepted">Geaccepteerd</option>
-                                                </select>
+                                                    <SelectTrigger
+                                                        className="w-[160px]"
+                                                        style={{
+                                                            background: order.status === 'accepted' ? '#d4edda' : '#fff3cd',
+                                                            color: order.status === 'accepted' ? '#155724' : '#856404',
+                                                            borderColor: order.status === 'accepted' ? '#155724' : '#856404',
+                                                        }}
+                                                    >
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="processing">In behandeling</SelectItem>
+                                                        <SelectItem value="accepted">Geaccepteerd</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
 
                                             <div className="col-span-1 text-right flex items-center justify-end gap-2">
