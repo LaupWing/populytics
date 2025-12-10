@@ -1,10 +1,21 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
-import { useCartStore } from '@/stores/cart-store';
+import { useCartStore, type CartItem } from '@/stores/cart-store';
 import { Toaster, toast } from 'sonner';
 
 export default function Cart() {
     const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
+
+    const { post, processing } = useForm({
+        items: items as CartItem[],
+    });
+
+    const handleCheckout = (e: React.FormEvent) => {
+        e.preventDefault();
+        post('/checkout', {
+            data: { items },
+        });
+    };
 
     const handleRemoveItem = (id: number, title: string) => {
         removeItem(id);
@@ -322,16 +333,20 @@ export default function Cart() {
                                             </span>
                                         </div>
 
-                                        <button
-                                            className="w-full py-3 rounded transition-all hover:opacity-90"
-                                            style={{
-                                                fontFamily: '"NexaText-Bold", sans-serif',
-                                                background: '#004876',
-                                                color: 'white',
-                                            }}
-                                        >
-                                            Afrekenen
-                                        </button>
+                                        <form onSubmit={handleCheckout}>
+                                            <button
+                                                type="submit"
+                                                disabled={processing}
+                                                className="w-full py-3 rounded transition-all hover:opacity-90 disabled:opacity-50"
+                                                style={{
+                                                    fontFamily: '"NexaText-Bold", sans-serif',
+                                                    background: '#004876',
+                                                    color: 'white',
+                                                }}
+                                            >
+                                                {processing ? 'Laden...' : 'Afrekenen'}
+                                            </button>
+                                        </form>
 
                                         <p
                                             className="text-center text-sm mt-4"

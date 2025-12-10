@@ -16,10 +16,21 @@ Route::get('/cart', function () {
     return Inertia::render('cart');
 })->name('cart');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    Route::post('/checkout', function () {
+        return Inertia::render('checkout');
+    })->name('checkout');
+
+    Route::get('/profile', function () {
+        $orders = auth()->user()->orders()->with('products')->latest()->get();
+        return Inertia::render('profile', [
+            'orders' => $orders,
+        ]);
+    })->name('profile');
 });
 
 require __DIR__.'/settings.php';
