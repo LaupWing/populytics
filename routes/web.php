@@ -23,7 +23,41 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     Route::post('/checkout', function () {
-        return Inertia::render('checkout');
+        $items = request()->input('items', []);
+
+        if (empty($items)) {
+            return redirect()->route('cart');
+        }
+
+        // Calculate total price
+        $totalPrice = 0;
+        foreach ($items as $item) {
+            $totalPrice += $item['price'] * $item['quantity'];
+        }
+
+        // Add shipping if under €50
+        if ($totalPrice < 50) {
+            $totalPrice += 4.95;
+        }
+
+        // Create the order
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'total_price' => $totalPrice,
+            'status' => 'processing',
+        ]);
+
+        // Attach products to order
+        foreach ($items as $item) {
+            $order->products()->attach($item['id'], [
+                'quantity' => $item['quantity'],
+                'price_at_purchase' => $item['price'],
+            ]);
+        }
+
+        return Inertia::render('checkout', [
+            'order' => $order->load('products'),
+        ]);
     })->name('checkout');
 
     Route::get('/profile', function () {
@@ -34,16 +68,28 @@ Route::middleware(['auth'])->group(function () {
     })->name('profile');
 
     Route::get('/orders/{order}', function (Order $order) {
-        // Ensure user can only view their own orders
-        if ($order->user_id !== auth()->id()) {
-            abort(403);
-        }
-
         $order->load(['products', 'user']);
         return Inertia::render('orders/show', [
             'order' => $order,
         ]);
     })->name('orders.show');
+
+    // Admin orders page
+    Route::get('/admin/orders', function () {
+        $orders = Order::with(['products', 'user'])->latest()->get();
+        return Inertia::render('admin/orders', [
+            'orders' => $orders,
+        ]);
+    })->name('admin.orders');
+
+    // Update order status
+    Route::patch('/admin/orders/{order}/status', function (Order $order) {
+        $order->update([
+            'status' => request()->input('status'),
+        ]);
+
+        return back();
+    })->name('admin.orders.update-status');
 });
 
 require __DIR__.'/settings.php';

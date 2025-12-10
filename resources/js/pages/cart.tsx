@@ -1,19 +1,18 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
-import { useCartStore, type CartItem } from '@/stores/cart-store';
+import { useCartStore } from '@/stores/cart-store';
 import { Toaster, toast } from 'sonner';
+import { useState } from 'react';
 
 export default function Cart() {
     const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
-
-    const { post, processing } = useForm({
-        items: items as CartItem[],
-    });
+    const [processing, setProcessing] = useState(false);
 
     const handleCheckout = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/checkout', {
-            data: { items },
+        setProcessing(true);
+        router.post('/checkout', { items }, {
+            onFinish: () => setProcessing(false),
         });
     };
 
