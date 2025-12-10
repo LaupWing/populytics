@@ -90,24 +90,26 @@ export default function Welcome({
 
                     <nav className="flex items-center gap-4">
                         {/* Shopping Cart Button */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="relative"
-                            style={{ color: '#004876' }}
-                        >
-                            <ShoppingCart className="h-5 w-5" />
-                            <Badge
-                                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                                style={{
-                                    background: '#00A6D6',
-                                    color: 'white',
-                                    border: 'none',
-                                }}
+                        <Link href="/cart">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="relative"
+                                style={{ color: '#004876' }}
                             >
-                                {getTotalItems()}
-                            </Badge>
-                        </Button>
+                                <ShoppingCart className="h-5 w-5" />
+                                <Badge
+                                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                                    style={{
+                                        background: '#00A6D6',
+                                        color: 'white',
+                                        border: 'none',
+                                    }}
+                                >
+                                    {getTotalItems()}
+                                </Badge>
+                            </Button>
+                        </Link>
 
                         {auth.user ? (
                             <Link
