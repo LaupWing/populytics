@@ -24,10 +24,10 @@ export default function Login({
 }: LoginProps) {
     return (
         <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
+            title="Inloggen"
+            description="Vul je e-mail en wachtwoord in om in te loggen"
         >
-            <Head title="Log in" />
+            <Head title="Inloggen" />
 
             <Form
                 {...store.form()}
@@ -36,9 +36,18 @@ export default function Login({
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label
+                                    htmlFor="email"
+                                    style={{
+                                        fontFamily: '"NexaText-Bold", sans-serif',
+                                        color: '#00A6D6',
+                                        fontSize: '0.95rem',
+                                    }}
+                                >
+                                    E-mailadres
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -47,21 +56,37 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="email@example.com"
+                                    placeholder="email@voorbeeld.nl"
+                                    className="rounded-md"
+                                    style={{
+                                        border: '1px solid #004876',
+                                        color: '#004876',
+                                        padding: '0.75rem',
+                                    }}
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label
+                                        htmlFor="password"
+                                        style={{
+                                            fontFamily: '"NexaText-Bold", sans-serif',
+                                            color: '#00A6D6',
+                                            fontSize: '0.95rem',
+                                        }}
+                                    >
+                                        Wachtwoord
+                                    </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="ml-auto text-sm"
+                                            className="ml-auto text-sm hover:underline"
                                             tabIndex={5}
+                                            style={{ color: '#004876' }}
                                         >
-                                            Forgot password?
+                                            Wachtwoord vergeten?
                                         </TextLink>
                                     )}
                                 </div>
@@ -72,7 +97,13 @@ export default function Login({
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="Wachtwoord"
+                                    className="rounded-md"
+                                    style={{
+                                        border: '1px solid #004876',
+                                        color: '#004876',
+                                        padding: '0.75rem',
+                                    }}
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -82,27 +113,48 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
+                                    style={{ borderColor: '#004876' }}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label
+                                    htmlFor="remember"
+                                    style={{ color: '#004876', cursor: 'pointer' }}
+                                >
+                                    Onthoud mij
+                                </Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="mt-4 w-full rounded-md transition-all hover:opacity-90"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
+                                style={{
+                                    fontFamily: '"NexaText-Bold", sans-serif',
+                                    background: '#004876',
+                                    color: 'white',
+                                    border: '2px solid #004876',
+                                    padding: '0.75rem',
+                                }}
                             >
                                 {processing && <Spinner />}
-                                Log in
+                                Inloggen
                             </Button>
                         </div>
 
                         {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                Don't have an account?{' '}
-                                <TextLink href={register()} tabIndex={5}>
-                                    Sign up
+                            <div
+                                className="text-center text-sm"
+                                style={{ color: '#004876' }}
+                            >
+                                Nog geen account?{' '}
+                                <TextLink
+                                    href={register()}
+                                    tabIndex={5}
+                                    className="font-semibold hover:underline"
+                                    style={{ color: '#00A6D6' }}
+                                >
+                                    Registreren
                                 </TextLink>
                             </div>
                         )}
@@ -111,7 +163,10 @@ export default function Login({
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div
+                    className="mb-4 text-center text-sm font-medium"
+                    style={{ color: '#00A6D6' }}
+                >
                     {status}
                 </div>
             )}

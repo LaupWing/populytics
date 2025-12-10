@@ -13,10 +13,10 @@ import AuthLayout from '@/layouts/auth-layout';
 export default function Register() {
     return (
         <AuthLayout
-            title="Create an account"
-            description="Enter your details below to create your account"
+            title="Account aanmaken"
+            description="Vul je gegevens in om een account aan te maken"
         >
-            <Head title="Register" />
+            <Head title="Registreren" />
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
@@ -25,9 +25,18 @@ export default function Register() {
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label
+                                    htmlFor="name"
+                                    style={{
+                                        fontFamily: '"NexaText-Bold", sans-serif',
+                                        color: '#00A6D6',
+                                        fontSize: '0.95rem',
+                                    }}
+                                >
+                                    Naam
+                                </Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -36,7 +45,13 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="Volledige naam"
+                                    className="rounded-md"
+                                    style={{
+                                        border: '1px solid #004876',
+                                        color: '#004876',
+                                        padding: '0.75rem',
+                                    }}
                                 />
                                 <InputError
                                     message={errors.name}
@@ -45,7 +60,16 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label
+                                    htmlFor="email"
+                                    style={{
+                                        fontFamily: '"NexaText-Bold", sans-serif',
+                                        color: '#00A6D6',
+                                        fontSize: '0.95rem',
+                                    }}
+                                >
+                                    E-mailadres
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -53,13 +77,28 @@ export default function Register() {
                                     tabIndex={2}
                                     autoComplete="email"
                                     name="email"
-                                    placeholder="email@example.com"
+                                    placeholder="email@voorbeeld.nl"
+                                    className="rounded-md"
+                                    style={{
+                                        border: '1px solid #004876',
+                                        color: '#004876',
+                                        padding: '0.75rem',
+                                    }}
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label
+                                    htmlFor="password"
+                                    style={{
+                                        fontFamily: '"NexaText-Bold", sans-serif',
+                                        color: '#00A6D6',
+                                        fontSize: '0.95rem',
+                                    }}
+                                >
+                                    Wachtwoord
+                                </Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -67,14 +106,27 @@ export default function Register() {
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Wachtwoord"
+                                    className="rounded-md"
+                                    style={{
+                                        border: '1px solid #004876',
+                                        color: '#004876',
+                                        padding: '0.75rem',
+                                    }}
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                <Label
+                                    htmlFor="password_confirmation"
+                                    style={{
+                                        fontFamily: '"NexaText-Bold", sans-serif',
+                                        color: '#00A6D6',
+                                        fontSize: '0.95rem',
+                                    }}
+                                >
+                                    Bevestig wachtwoord
                                 </Label>
                                 <Input
                                     id="password_confirmation"
@@ -83,7 +135,13 @@ export default function Register() {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
+                                    placeholder="Bevestig wachtwoord"
+                                    className="rounded-md"
+                                    style={{
+                                        border: '1px solid #004876',
+                                        color: '#004876',
+                                        padding: '0.75rem',
+                                    }}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -92,19 +150,34 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
+                                className="mt-4 w-full rounded-md transition-all hover:opacity-90"
                                 tabIndex={5}
                                 data-test="register-user-button"
+                                style={{
+                                    fontFamily: '"NexaText-Bold", sans-serif',
+                                    background: '#00A6D6',
+                                    color: 'white',
+                                    border: '2px solid #00A6D6',
+                                    padding: '0.75rem',
+                                }}
                             >
                                 {processing && <Spinner />}
-                                Create account
+                                Account aanmaken
                             </Button>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6}>
-                                Log in
+                        <div
+                            className="text-center text-sm"
+                            style={{ color: '#004876' }}
+                        >
+                            Heb je al een account?{' '}
+                            <TextLink
+                                href={login()}
+                                tabIndex={6}
+                                className="font-semibold hover:underline"
+                                style={{ color: '#00A6D6' }}
+                            >
+                                Inloggen
                             </TextLink>
                         </div>
                     </>

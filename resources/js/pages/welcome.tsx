@@ -5,29 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart } from 'lucide-react';
 
-const products = [
-    {
-        id: 1,
-        title: 'DIY Participation Toolkit',
-        description: 'Complete kit for schools and organizations to run their own citizen participation workshops. Includes facilitator guide, worksheets, and interactive exercises.',
-        price: '€89.00',
-        image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop',
-        badge: 'Bestseller',
-    },
-    {
-        id: 2,
-        title: 'Policy Making Board Game',
-        description: 'An engaging board game that teaches players about trade-offs in policy decisions. Perfect for classrooms, team buildings, and civic education.',
-        price: '€49.00',
-        image: 'https://images.unsplash.com/photo-1632501641765-e568d28b0015?w=400&h=300&fit=crop',
-        badge: 'New',
-    },
-];
+interface Product {
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    image_url: string;
+}
 
 export default function Welcome({
     canRegister = true,
+    products = [],
 }: {
     canRegister?: boolean;
+    products?: Product[];
 }) {
     const { auth } = usePage<SharedData>().props;
 
@@ -235,20 +226,10 @@ export default function Welcome({
                                     {/* Product Image */}
                                     <div className="relative h-56 overflow-hidden">
                                         <img
-                                            src={product.image}
+                                            src={product.image_url}
                                             alt={product.title}
                                             className="w-full h-full object-cover transition-transform hover:scale-105"
                                         />
-                                        <span
-                                            className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium"
-                                            style={{
-                                                background: product.badge === 'Bestseller' ? '#00A6D6' : '#004876',
-                                                color: 'white',
-                                                fontFamily: '"NexaText-Bold", sans-serif',
-                                            }}
-                                        >
-                                            {product.badge}
-                                        </span>
                                     </div>
 
                                     {/* Product Info */}
@@ -281,7 +262,7 @@ export default function Welcome({
                                                     color: '#00A6D6',
                                                 }}
                                             >
-                                                {product.price}
+                                                €{product.price.toFixed(2)}
                                             </span>
                                             <button
                                                 className="px-6 py-2 rounded transition-all hover:opacity-90"
