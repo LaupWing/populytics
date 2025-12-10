@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Requests\CheckoutRequest;
 use App\Mail\OrderConfirmation;
 use App\Models\Order;
 use App\Models\Product;
@@ -30,12 +31,8 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::post('/checkout', function () {
-        $items = request()->input('items', []);
-
-        if (empty($items)) {
-            return redirect()->route('cart');
-        }
+    Route::post('/checkout', function (CheckoutRequest $request) {
+        $items = $request->validated()['items'];
 
         // Calculate total price
         $totalPrice = 0;
