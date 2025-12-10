@@ -94,7 +94,7 @@ export default function AdminOrders({ orders = [] }: AdminOrdersProps) {
                 `}</style>
             </Head>
 
-            <Toaster position="top-right" richColors />
+            <Toaster position="bottom-right" richColors />
 
             <div
                 className="min-h-screen"

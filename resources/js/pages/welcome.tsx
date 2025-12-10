@@ -49,7 +49,7 @@ export default function Welcome({
             </Head>
 
             {/* Toast notifications */}
-            <Toaster position="top-right" richColors />
+            <Toaster position="bottom-right" richColors />
 
             <div
                 className="min-h-screen"

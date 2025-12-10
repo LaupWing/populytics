@@ -68,6 +68,11 @@ Route::middleware(['auth'])->group(function () {
     })->name('profile');
 
     Route::get('/orders/{order}', function (Order $order) {
+        // Check if user owns this order
+        if ($order->user_id !== auth()->id()) {
+            return Inertia::render('errors/unauthorized-order');
+        }
+
         $order->load(['products', 'user']);
         return Inertia::render('orders/show', [
             'order' => $order,
