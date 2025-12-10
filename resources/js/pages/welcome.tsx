@@ -3,7 +3,9 @@ import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Plus, Minus } from 'lucide-react';
+import { useCartStore } from '@/stores/cart-store';
+import { Toaster, toast } from 'sonner';
 
 interface Product {
     id: number;
@@ -21,6 +23,30 @@ export default function Welcome({
     products?: Product[];
 }) {
     const { auth } = usePage<SharedData>().props;
+    const { items, addItem, updateQuantity, getTotalItems } = useCartStore();
+
+    const getProductQuantity = (productId: number) => {
+        const item = items.find((i) => i.id === productId);
+        return item?.quantity || 0;
+    };
+
+    const handleAddToCart = (product: Product) => {
+        addItem({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image_url: product.image_url,
+        });
+
+        toast.success(`${product.title} toegevoegd aan winkelwagen`, {
+            description: `€${product.price.toFixed(2)}`,
+            style: {
+                background: '#004876',
+                color: 'white',
+                border: 'none',
+            },
+        });
+    };
 
     return (
         <>
@@ -51,6 +77,9 @@ export default function Welcome({
                     }
                 `}</style>
             </Head>
+
+            {/* Toast notifications */}
+            <Toaster position="top-right" richColors />
 
             <div
                 className="min-h-screen"
@@ -106,7 +135,7 @@ export default function Welcome({
                                     border: 'none',
                                 }}
                             >
-                                0
+                                {getTotalItems()}
                             </Badge>
                         </Button>
 
@@ -264,17 +293,55 @@ export default function Welcome({
                                             >
                                                 €{product.price.toFixed(2)}
                                             </span>
-                                            <button
-                                                className="px-6 py-2 rounded transition-all hover:opacity-90"
-                                                style={{
-                                                    fontFamily: '"NexaText-Bold", sans-serif',
-                                                    background: '#004876',
-                                                    color: 'white',
-                                                    border: '2px solid #004876',
-                                                }}
-                                            >
-                                                In winkelwagen
-                                            </button>
+
+                                            {getProductQuantity(product.id) > 0 ? (
+                                                <div className="flex items-center gap-3">
+                                                    <button
+                                                        onClick={() => updateQuantity(product.id, getProductQuantity(product.id) - 1)}
+                                                        className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:opacity-80"
+                                                        style={{
+                                                            background: '#e9f3f8',
+                                                            color: '#004876',
+                                                            border: '2px solid #004876',
+                                                        }}
+                                                    >
+                                                        <Minus className="w-4 h-4" />
+                                                    </button>
+                                                    <span
+                                                        className="text-lg min-w-[2rem] text-center"
+                                                        style={{
+                                                            fontFamily: '"NexaText-Bold", sans-serif',
+                                                            color: '#004876',
+                                                        }}
+                                                    >
+                                                        {getProductQuantity(product.id)}
+                                                    </span>
+                                                    <button
+                                                        onClick={() => handleAddToCart(product)}
+                                                        className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:opacity-80"
+                                                        style={{
+                                                            background: '#004876',
+                                                            color: 'white',
+                                                            border: '2px solid #004876',
+                                                        }}
+                                                    >
+                                                        <Plus className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleAddToCart(product)}
+                                                    className="px-6 py-2 rounded transition-all hover:opacity-90"
+                                                    style={{
+                                                        fontFamily: '"NexaText-Bold", sans-serif',
+                                                        background: '#004876',
+                                                        color: 'white',
+                                                        border: '2px solid #004876',
+                                                    }}
+                                                >
+                                                    In winkelwagen
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
