@@ -2,6 +2,7 @@ import { ShoppingCart, Plus, Minus } from 'lucide-react';
 import { useCartStore } from '@/stores/cart-store';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { Link } from '@inertiajs/react';
 
 export interface Product {
     id: number;
@@ -60,25 +61,27 @@ export function ProductCard({ product }: ProductCardProps) {
             }}
         >
             {/* Product Image */}
-            <div className="relative h-56 overflow-hidden">
+            <Link href={`/products/${product.id}`} className="block relative h-56 overflow-hidden">
                 <img
                     src={product.image_url}
                     alt={product.title}
                     className="w-full h-full object-cover transition-transform hover:scale-105"
                 />
-            </div>
+            </Link>
 
             {/* Product Info */}
             <div className="p-6">
-                <h3
-                    className="text-xl mb-2"
-                    style={{
-                        fontFamily: '"NexaText-Bold", sans-serif',
-                        color: '#004876',
-                    }}
-                >
-                    {product.title}
-                </h3>
+                <Link href={`/products/${product.id}`}>
+                    <h3
+                        className="text-xl mb-2 hover:opacity-70 transition-opacity"
+                        style={{
+                            fontFamily: '"NexaText-Bold", sans-serif',
+                            color: '#004876',
+                        }}
+                    >
+                        {product.title}
+                    </h3>
+                </Link>
                 <p
                     className="mb-4 text-sm"
                     style={{

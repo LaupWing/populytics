@@ -17,6 +17,12 @@ Route::get('/cart', function () {
     return Inertia::render('cart');
 })->name('cart');
 
+Route::get('/products/{product}', function (Product $product) {
+    return Inertia::render('products/show', [
+        'product' => $product,
+    ]);
+})->name('products.show');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
