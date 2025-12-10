@@ -16,7 +16,8 @@ export default function Welcome({
     products?: Product[];
 }) {
     const { auth } = usePage<SharedData>().props;
-    const { getTotalItems } = useCartStore();
+    const items = useCartStore((state) => state.items);
+    const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
     return (
         <>
@@ -106,7 +107,7 @@ export default function Welcome({
                                         border: 'none',
                                     }}
                                 >
-                                    {getTotalItems()}
+                                    {totalItems}
                                 </Badge>
                             </Button>
                         </Link>
