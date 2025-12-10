@@ -1,16 +1,30 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { CheckCircle, Package, ShoppingBag, ArrowRight, Sparkles } from 'lucide-react';
+import { Package, ShoppingBag, ArrowRight } from 'lucide-react';
 import { type SharedData } from '@/types';
 import { useCartStore } from '@/stores/cart-store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+const GIPHY_API_KEY = 'dc6zaTOxFJmzC'; // Giphy public beta key
+const CELEBRATION_GIFS = [
+    'https://media.giphy.com/media/g9582DNuQppxC/giphy.gif', // Seinfeld happy dance
+    'https://media.giphy.com/media/artj92V8o75VPL7AeQ/giphy.gif', // Yay celebration
+    'https://media.giphy.com/media/XreQmk7ETCak0/giphy.gif', // Excited Colbert
+    'https://media.giphy.com/media/3oz8xRF0v9WMAUVLNK/giphy.gif', // Confetti
+    'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif', // Happy dance
+];
 
 export default function Checkout() {
     const { auth } = usePage<SharedData>().props;
     const { clearCart } = useCartStore();
+    const [gifUrl, setGifUrl] = useState<string>('');
 
-    // Clear cart after successful checkout
+    // Clear cart and fetch a random celebration GIF
     useEffect(() => {
         clearCart();
+
+        // Pick a random GIF from our curated list
+        const randomGif = CELEBRATION_GIFS[Math.floor(Math.random() * CELEBRATION_GIFS.length)];
+        setGifUrl(randomGif);
     }, [clearCart]);
 
     return (
@@ -34,14 +48,6 @@ export default function Checkout() {
                         src: url("https://populytics.nl/wp-content/themes/populytics/assets/fonts/NexaText/NexaText-Heavy.woff2") format("woff2");
                         font-weight: normal;
                         font-style: normal;
-                    }
-                    @keyframes float {
-                        0%, 100% { transform: translateY(0); }
-                        50% { transform: translateY(-10px); }
-                    }
-                    @keyframes pulse-ring {
-                        0% { transform: scale(0.8); opacity: 1; }
-                        100% { transform: scale(1.4); opacity: 0; }
                     }
                 `}</style>
             </Head>
@@ -84,36 +90,19 @@ export default function Checkout() {
                 {/* Success Content */}
                 <main className="px-6 py-16">
                     <div className="max-w-2xl mx-auto text-center">
-                        {/* Animated Success Icon */}
-                        <div className="relative inline-block mb-8">
-                            <div
-                                className="absolute inset-0 rounded-full"
-                                style={{
-                                    background: '#00A6D6',
-                                    animation: 'pulse-ring 2s ease-out infinite',
-                                }}
-                            />
-                            <div
-                                className="relative w-24 h-24 rounded-full flex items-center justify-center"
-                                style={{
-                                    background: 'linear-gradient(135deg, #00A6D6 0%, #004876 100%)',
-                                    animation: 'float 3s ease-in-out infinite',
-                                }}
-                            >
-                                <CheckCircle className="w-12 h-12 text-white" />
+                        {/* Celebration GIF */}
+                        {gifUrl && (
+                            <div className="mb-8">
+                                <img
+                                    src={gifUrl}
+                                    alt="Celebration"
+                                    className="w-48 h-48 mx-auto rounded-2xl object-cover"
+                                    style={{
+                                        boxShadow: '3px 3px 13px 2px rgba(0, 0, 0, 0.1)',
+                                    }}
+                                />
                             </div>
-                        </div>
-
-                        <div className="flex items-center justify-center gap-2 mb-4">
-                            <Sparkles className="w-5 h-5" style={{ color: '#00A6D6' }} />
-                            <span
-                                className="text-sm uppercase tracking-wider"
-                                style={{ color: '#00A6D6' }}
-                            >
-                                Bestelling succesvol
-                            </span>
-                            <Sparkles className="w-5 h-5" style={{ color: '#00A6D6' }} />
-                        </div>
+                        )}
 
                         <h1
                             className="text-4xl mb-4"

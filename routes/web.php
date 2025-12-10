@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,6 +32,18 @@ Route::middleware(['auth'])->group(function () {
             'orders' => $orders,
         ]);
     })->name('profile');
+
+    Route::get('/orders/{order}', function (Order $order) {
+        // Ensure user can only view their own orders
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $order->load(['products', 'user']);
+        return Inertia::render('orders/show', [
+            'order' => $order,
+        ]);
+    })->name('orders.show');
 });
 
 require __DIR__.'/settings.php';

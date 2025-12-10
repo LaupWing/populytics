@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { User, Package, ShoppingBag, ArrowLeft, Clock, CheckCircle, Loader2 } from 'lucide-react';
+import { User, Package, ShoppingBag, ArrowLeft, Clock, CheckCircle, Loader2, ChevronRight } from 'lucide-react';
 import { type SharedData } from '@/types';
 
 interface OrderProduct {
@@ -216,9 +216,10 @@ export default function Profile({ orders = [] }: ProfileProps) {
                         ) : (
                             <div className="space-y-4">
                                 {orders.map((order) => (
-                                    <div
+                                    <Link
                                         key={order.id}
-                                        className="rounded-lg overflow-hidden"
+                                        href={`/orders/${order.id}`}
+                                        className="block rounded-lg overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
                                         style={{
                                             background: 'white',
                                             boxShadow: '3px 3px 13px 2px rgba(0, 0, 0, 0.1)',
@@ -260,6 +261,7 @@ export default function Profile({ orders = [] }: ProfileProps) {
                                                 >
                                                     €{Number(order.total_price).toFixed(2)}
                                                 </span>
+                                                <ChevronRight className="w-5 h-5" style={{ color: '#004876', opacity: 0.5 }} />
                                             </div>
                                         </div>
 
@@ -307,7 +309,7 @@ export default function Profile({ orders = [] }: ProfileProps) {
                                                 ))}
                                             </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         )}

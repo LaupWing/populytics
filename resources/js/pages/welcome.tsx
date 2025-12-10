@@ -1,9 +1,9 @@
-import { dashboard, login, register } from '@/routes';
+import { login, register } from '@/routes';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, User } from 'lucide-react';
 import { useCartStore } from '@/stores/cart-store';
 import { Toaster } from 'sonner';
 import { ProductCard, type Product } from '@/components/product-card';
@@ -112,17 +112,18 @@ export default function Welcome({
                         </Link>
 
                         {auth.user ? (
-                            <Link
-                                href={dashboard()}
-                                className="px-5 py-2 rounded text-sm transition-all"
-                                style={{
-                                    fontFamily: '"NexaText-Bold", sans-serif',
-                                    background: '#004876',
-                                    color: 'white',
-                                    border: '2px solid #004876',
-                                }}
-                            >
-                                Dashboard
+                            <Link href="/profile">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="rounded-full"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #00A6D6 0%, #004876 100%)',
+                                        color: 'white',
+                                    }}
+                                >
+                                    <User className="h-5 w-5" />
+                                </Button>
                             </Link>
                         ) : (
                             <>
