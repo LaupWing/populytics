@@ -11,7 +11,7 @@ export default function Cart() {
     const handleCheckout = (e: React.FormEvent) => {
         e.preventDefault();
         setProcessing(true);
-        router.post('/checkout', { items }, {
+        router.post('/checkout', { items: JSON.stringify(items) }, {
             onFinish: () => setProcessing(false),
         });
     };

@@ -43,6 +43,15 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
+      - name: Copy environment file
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Generate Wayfinder routes
+        run: php artisan wayfinder:generate
+
       - name: Check PHP code style (Pint)
         run: vendor/bin/pint --test
         continue-on-error: true

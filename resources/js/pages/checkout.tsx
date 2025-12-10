@@ -2,9 +2,8 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { Package, ShoppingBag, ArrowRight } from 'lucide-react';
 import { type SharedData } from '@/types';
 import { useCartStore } from '@/stores/cart-store';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
-const GIPHY_API_KEY = 'dc6zaTOxFJmzC'; // Giphy public beta key
 const CELEBRATION_GIFS = [
     'https://media.giphy.com/media/g9582DNuQppxC/giphy.gif', // Seinfeld happy dance
     'https://media.giphy.com/media/artj92V8o75VPL7AeQ/giphy.gif', // Yay celebration
@@ -16,15 +15,16 @@ const CELEBRATION_GIFS = [
 export default function Checkout() {
     const { auth } = usePage<SharedData>().props;
     const { clearCart } = useCartStore();
-    const [gifUrl, setGifUrl] = useState<string>('');
 
-    // Clear cart and fetch a random celebration GIF
+    // Pick a random GIF from our curated list (computed once on mount)
+    const gifUrl = useMemo(
+        () => CELEBRATION_GIFS[Math.floor(Math.random() * CELEBRATION_GIFS.length)],
+        [],
+    );
+
+    // Clear cart on mount
     useEffect(() => {
         clearCart();
-
-        // Pick a random GIF from our curated list
-        const randomGif = CELEBRATION_GIFS[Math.floor(Math.random() * CELEBRATION_GIFS.length)];
-        setGifUrl(randomGif);
     }, [clearCart]);
 
     return (
